@@ -94,6 +94,33 @@ public class UserAgentParser extends GenericUDF {
     // We will be returning a Text object
     return PrimitiveObjectInspectorFactory.writableStringObjectInspector;
   } 
+  
+  private String getVal(Client c, String opt) {
+	  userOptions uo = userOptions.valueOf(opt.toLowerCase());
+		
+		switch (uo)	{
+			case os:
+				return c.os.toString();
+			case os_family:
+				return c.os.family == null ? "null" : c.os.family;
+			case os_major:
+				return c.os.major == null ? "null" : c.os.major;
+			case os_minor:
+				return c.os.minor == null ? "null" : c.os.minor;
+			case ua:
+				return c.userAgent.toString();
+			case ua_family:
+				return c.userAgent.family == null ? "null" : c.userAgent.family;
+			case ua_major:
+				return c.userAgent.major == null ? "null" : c.userAgent.major;
+			case ua_minor:
+				return c.userAgent.minor == null ? "null" : c.userAgent.minor;
+			case device:
+				return c.device.family == null ? "null" : c.device.family;
+			default:
+				return null;
+		}
+  }
 
   /**
    * Get a parsed string from an input user agent string
@@ -124,42 +151,20 @@ public class UserAgentParser extends GenericUDF {
 		if (options == null) {
 			result.set(c.toString());
 		}
+		
+		else if (options.toString().contains(",")) {
+			String[] opts = options.toString().split(",");
+			StringBuilder res = new StringBuilder(100);
+			res.append(getVal(c, opts[0]));
+			for (int i = 1; i < opts.length; i++) {
+				res.append("::::::");
+				res.append(getVal(c, opts[i]));
+			}
+			result.set(res.toString());
+		}
 
 		else {
-			userOptions uo = userOptions.valueOf(options.toString().toLowerCase());
-			
-			switch (uo)	{
-				case os:
-					result.set(c.os.toString());
-					break;
-				case os_family:
-					result.set(c.os.family == null ? "null" : c.os.family );
-					break;
-				case os_major:
-					result.set(c.os.major == null ? "null" : c.os.major );
-					break;
-				case os_minor:
-					result.set(c.os.minor == null ? "null" : c.os.minor );
-					break;
-				case ua:
-					result.set(c.userAgent.toString());
-					break;
-				case ua_family:
-					result.set(c.userAgent.family == null ? "null" : c.userAgent.family );
-					break;
-				case ua_major:
-					result.set(c.userAgent.major == null ? "null" : c.userAgent.major );
-					break;
-				case ua_minor:
-					result.set(c.userAgent.minor == null ? "null" : c.userAgent.minor );
-					break;
-				case device:
-					result.set(c.device.family == null ? "null" : c.device.family );
-					break;
-				default:
-					result = null;
-					break;
-			}
+			result.set(getVal(c, options.toString()));
         }
     } catch (IllegalArgumentException e) {
 		LOG.warn("Caught IllegalArgumentException: " + e.getMessage());
