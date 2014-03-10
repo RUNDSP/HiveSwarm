@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.*;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -39,6 +40,7 @@ public class UserAgentParser extends GenericUDF {
   private Text result = new Text();
   private ObjectInspectorConverters.Converter[] converters;
   static final Log LOG = LogFactory.getLog(UserAgentParser.class.getName());
+  private static final Pattern mobilePattern = Pattern.compile("Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune|Obigo");
 
   private static final Parser uaParser;
   static {
@@ -53,7 +55,7 @@ public class UserAgentParser extends GenericUDF {
   
 
   private enum userOptions {
-	os, os_family, os_major, os_minor, ua, ua_family, ua_major, ua_minor, device
+	os, os_family, os_major, os_minor, ua, ua_family, ua_major, ua_minor, device, rundsp_device_data
   }
 
   public UserAgentParser() {
@@ -94,33 +96,6 @@ public class UserAgentParser extends GenericUDF {
     // We will be returning a Text object
     return PrimitiveObjectInspectorFactory.writableStringObjectInspector;
   } 
-  
-  private String getVal(Client c, String opt) {
-	  userOptions uo = userOptions.valueOf(opt.toLowerCase());
-		
-		switch (uo)	{
-			case os:
-				return c.os.toString();
-			case os_family:
-				return c.os.family == null ? "null" : c.os.family;
-			case os_major:
-				return c.os.major == null ? "null" : c.os.major;
-			case os_minor:
-				return c.os.minor == null ? "null" : c.os.minor;
-			case ua:
-				return c.userAgent.toString();
-			case ua_family:
-				return c.userAgent.family == null ? "null" : c.userAgent.family;
-			case ua_major:
-				return c.userAgent.major == null ? "null" : c.userAgent.major;
-			case ua_minor:
-				return c.userAgent.minor == null ? "null" : c.userAgent.minor;
-			case device:
-				return c.device.family == null ? "null" : c.device.family;
-			default:
-				return null;
-		}
-  }
 
   /**
    * Get a parsed string from an input user agent string
@@ -151,20 +126,62 @@ public class UserAgentParser extends GenericUDF {
 		if (options == null) {
 			result.set(c.toString());
 		}
-		
-		else if (options.toString().contains(",")) {
-			String[] opts = options.toString().split(",");
-			StringBuilder res = new StringBuilder(100);
-			res.append(getVal(c, opts[0]));
-			for (int i = 1; i < opts.length; i++) {
-				res.append("::::::");
-				res.append(getVal(c, opts[i]));
-			}
-			result.set(res.toString());
-		}
 
 		else {
-			result.set(getVal(c, options.toString()));
+			userOptions uo = userOptions.valueOf(options.toString().toLowerCase());
+			
+			switch (uo)	{
+				case os:
+					result.set(c.os.toString());
+					break;
+				case os_family:
+					result.set(c.os.family == null ? "null" : c.os.family );
+					break;
+				case os_major:
+					result.set(c.os.major == null ? "null" : c.os.major );
+					break;
+				case os_minor:
+					result.set(c.os.minor == null ? "null" : c.os.minor );
+					break;
+				case ua:
+					result.set(c.userAgent.toString());
+					break;
+				case ua_family:
+					result.set(c.userAgent.family == null ? "null" : c.userAgent.family );
+					break;
+				case ua_major:
+					result.set(c.userAgent.major == null ? "null" : c.userAgent.major );
+					break;
+				case ua_minor:
+					result.set(c.userAgent.minor == null ? "null" : c.userAgent.minor );
+					break;
+				case device:
+					result.set(c.device.family == null ? "null" : c.device.family );
+					break;
+				case rundsp_device_data:
+					final String sep = "::::::";
+					final StringBuilder res = new StringBuilder(150)
+						.append(c.userAgent.family == null ? "Other" : c.userAgent.family)
+						.append(" ")
+						.append(c.userAgent.major == null ? "" : c.userAgent.major)
+						.append(".")
+						.append(c.userAgent.minor == null ? "" : c.userAgent.minor)
+						.append(sep)
+						.append(c.os.family == null ? "Other" : c.os.family)
+						.append(" ")
+						.append(c.os.major == null ? "" : c.os.major)
+						.append(".")
+						.append(c.os.minor == null ? "" : c.os.minor)
+						.append(sep)
+						.append(c.device.family == null ? "Other" : c.device.family)
+						.append(sep)
+						.append(mobilePattern.matcher(UserAgent.toString()).matches() ? "mobile" : "display");
+					result.set(res.toString());
+					break;
+				default:
+					result = null;
+					break;
+			}
         }
     } catch (IllegalArgumentException e) {
 		LOG.warn("Caught IllegalArgumentException: " + e.getMessage());
