@@ -160,19 +160,23 @@ public class UserAgentParser extends GenericUDF {
 					break;
 				case rundsp_device_data:
 					final String sep = "::::::";
-					final StringBuilder res = new StringBuilder(150)
-						.append(c.userAgent.family == null ? "Other" : c.userAgent.family)
-						.append(" ")
-						.append(c.userAgent.major == null ? "" : c.userAgent.major)
-						.append(".")
-						.append(c.userAgent.minor == null ? "" : c.userAgent.minor)
-						.append(sep)
-						.append(c.os.family == null ? "Other" : c.os.family)
-						.append(" ")
-						.append(c.os.major == null ? "" : c.os.major)
-						.append(".")
-						.append(c.os.minor == null ? "" : c.os.minor)
-						.append(sep)
+					final StringBuilder res = new StringBuilder(100)
+						.append(c.userAgent.family == null ? "Other" : c.userAgent.family);
+					if (c.userAgent.major != null) {
+						res.append(" ").append(c.userAgent.major);
+						if (c.userAgent.minor != null) {
+							res.append(".").append(c.userAgent.minor);
+						}
+					}
+					res.append(sep)
+						.append(c.os.family == null ? "Other" : c.os.family);
+					if (c.os.major != null) {
+						res.append(" ").append(c.os.major);
+						if (c.os.minor != null) {
+							res.append(".").append(c.os.minor);
+						}
+					}
+					res.append(sep)
 						.append(c.device.family == null ? "Other" : c.device.family)
 						.append(sep)
 						.append(mobilePattern.matcher(UserAgent.toString()).matches() ? "mobile" : "display");
