@@ -4,6 +4,10 @@
   <groupId>com.livingsocial.hive.udf</groupId>
   <artifactId>HiveSwarm</artifactId>
   <packaging>jar</packaging>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
   <version>1.1.3rundsp-SNAPSHOT</version>
   <name>HiveSwarm</name>
   <url>https://github.com/livingsocial/HiveSwarm</url>
@@ -74,13 +78,12 @@
 
 
   <dependencies>
-<!--    <dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>4.8.2</version>
       <scope>test</scope>
     </dependency>
-    -->
 
 <!-- cloudera 4 dependencies -->
     <dependency>
