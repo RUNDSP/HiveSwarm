@@ -4,7 +4,7 @@
   <groupId>com.livingsocial.hive.udf</groupId>
   <artifactId>HiveSwarm</artifactId>
   <packaging>jar</packaging>
-  <version>1.1.2rundsp-SNAPSHOT</version>
+  <version>1.1.3rundsp-SNAPSHOT</version>
   <name>HiveSwarm</name>
   <url>https://github.com/livingsocial/HiveSwarm</url>
 
