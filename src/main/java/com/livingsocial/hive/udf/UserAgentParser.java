@@ -40,7 +40,7 @@ public class UserAgentParser extends GenericUDF {
   private Text result = new Text();
   private ObjectInspectorConverters.Converter[] converters;
   static final Log LOG = LogFactory.getLog(UserAgentParser.class.getName());
-  private static final Pattern mobilePattern = Pattern.compile(".*(Mobile|iPhone|iPod|iPad|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|hpwOS|webOS|Fennec|Minimo|Opera Mobi|Opera Mini|Blazer|Dolfin|Dolphin|Skyfire|Zune|Obigo).*")
+  private static final Pattern mobilePattern = Pattern.compile(".*(Mobile|iPhone|iPod|iPad|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|hpwOS|webOS|Fennec|Minimo|Opera Mobi|Opera Mini|Blazer|Dolfin|Dolphin|Skyfire|Zune|Obigo).*");
 
   private static final Parser uaParser;
   static {
