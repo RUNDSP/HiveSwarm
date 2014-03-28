@@ -55,7 +55,7 @@ public class UserAgentParser extends GenericUDF {
   
 
   private enum userOptions {
-	os, os_family, os_major, os_minor, ua, ua_family, ua_major, ua_minor, device, rundsp_device_data
+	os, os_family, os_major, os_minor, os_patch, os_patch_minor, ua, ua_family, ua_major, ua_minor, ua_patch, device, rundsp_device_data
   }
 
   public UserAgentParser() {
@@ -140,6 +140,12 @@ public class UserAgentParser extends GenericUDF {
 				case os_major:
 					result.set(c.os.major == null ? "null" : c.os.major );
 					break;
+        case os_patch:
+          result.set(c.os.patch == null ? "null" : c.os.patch );
+          break;
+        case os_patch_minor:
+          result.set(c.os.patchMinor == null ? "null" : c.os.patchMinor );
+          break;
 				case os_minor:
 					result.set(c.os.minor == null ? "null" : c.os.minor );
 					break;
@@ -152,6 +158,9 @@ public class UserAgentParser extends GenericUDF {
 				case ua_major:
 					result.set(c.userAgent.major == null ? "null" : c.userAgent.major );
 					break;
+        case ua_patch:
+          result.set(c.userAgent.patch == null ? "null" : c.userAgent.patch );
+          break;
 				case ua_minor:
 					result.set(c.userAgent.minor == null ? "null" : c.userAgent.minor );
 					break;
@@ -166,6 +175,10 @@ public class UserAgentParser extends GenericUDF {
 						res.append(" ").append(c.userAgent.major);
 						if (c.userAgent.minor != null) {
 							res.append(".").append(c.userAgent.minor);
+              if (c.userAgent.patch != null) {
+                res.append(".").append(c.userAgent.patch);
+              }
+
 						}
 					}
 					res.append(sep)
@@ -174,6 +187,12 @@ public class UserAgentParser extends GenericUDF {
 						res.append(" ").append(c.os.major);
 						if (c.os.minor != null) {
 							res.append(".").append(c.os.minor);
+              if (c.os.patch != null) {
+                res.append(".").append(c.os.patch);
+                if (c.os.patchMinor != null) {
+                  res.append(".").append(c.os.patchMinor);
+                }
+              }
 						}
 					}
 					res.append(sep)
