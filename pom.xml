@@ -143,7 +143,7 @@
     <dependency>
       <groupId>ua_parser</groupId>
       <artifactId>ua-parser</artifactId>
-      <version>1.2.2-LS</version>
+      <version>1.2.1</version>
     </dependency>
     <dependency>
       <groupId>org.yaml</groupId>

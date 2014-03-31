@@ -18,6 +18,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectIn
 
 
 public class UserAgentParserTest {
+   /* keep these tests in sync with the portal AdGearEventWorker spec */
 
    @Test
    public void UserAgentParserTest() throws HiveException {
@@ -36,6 +37,25 @@ public class UserAgentParserTest {
       String device_data_str = new String("rundsp_device_data");
       Object result_str = userAgentParser.evaluate(new DeferredObject[] { new DeferredJavaObject(user_agent_str), new DeferredJavaObject(device_data_str) });
       Assert.assertEquals(expected_str, result_str.toString());
+
+
+      String user_agent_windows = new String("Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; MATBJS)");
+      String expected_windows   = new String("IE 10.0::::::Windows 8::::::Windows 8::::::display");
+      Object result_windows = userAgentParser.evaluate(new DeferredObject[] { new DeferredJavaObject(user_agent_windows), new DeferredJavaObject(device_data_str) });
+      Assert.assertEquals(expected_windows, result_windows.toString());
+
+
+      String user_agent_mac = new String("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.71 (KHTML, like Gecko) Version/6.1 Safari/537.71");
+      String expected_mac   = new String("Safari 6.1::::::Mac OS X 10.7.5::::::Mac OS X::::::display");
+      Object result_mac = userAgentParser.evaluate(new DeferredObject[] { new DeferredJavaObject(user_agent_mac), new DeferredJavaObject(device_data_str) });
+      Assert.assertEquals(expected_mac, result_mac.toString());
+
+      String user_agent_kindle = new String("Mozilla/5.0 (Linux; U; en-us; KFSOWI Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Silk/3.8 Safari/535.19 Silk-Accelerated=true");
+      String expected_kindle   = new String("Amazon Silk 3.8::::::Android::::::Kindle Fire::::::mobile");
+      Object result_kindle = userAgentParser.evaluate(new DeferredObject[] { new DeferredJavaObject(user_agent_kindle), new DeferredJavaObject(device_data_str) });
+      Assert.assertEquals(expected_kindle, result_kindle.toString());
+
+
    }
 
 }  

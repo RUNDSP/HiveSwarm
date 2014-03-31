@@ -195,10 +195,20 @@ public class UserAgentParser extends GenericUDF {
               }
 						}
 					}
-					res.append(sep)
-						.append(c.device.family == null ? "Other" : c.device.family)
-						.append(sep)
-						.append(mobilePattern.matcher(UserAgent.toString()).matches() ? "mobile" : "display");
+					res.append(sep);
+          Boolean is_mobile = new Boolean(false);
+          is_mobile = mobilePattern.matcher( UserAgent.toString() ).matches();
+          if (is_mobile) {
+            res.append(c.device.family == null ? "Other" : c.device.family)
+            .append(sep)
+            .append("mobile");            
+          }
+          else {
+            // If desktop, then we want to have os family as the device.
+            res.append(c.os.family == null ? "Other" : c.os.family)
+            .append(sep)
+            .append("display");  
+          }
 					result.set(res.toString());
 					break;
 				default:
