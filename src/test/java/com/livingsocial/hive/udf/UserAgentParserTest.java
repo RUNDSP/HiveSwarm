@@ -55,6 +55,14 @@ public class UserAgentParserTest {
       Object result_kindle = userAgentParser.evaluate(new DeferredObject[] { new DeferredJavaObject(user_agent_kindle), new DeferredJavaObject(device_data_str) });
       Assert.assertEquals(expected_kindle, result_kindle.toString());
 
+      String platform = new String("platform");
+      String expected_windows_platform = new String("Windows 8");
+      Object result_windows_platform = userAgentParser.evaluate(new DeferredObject[] { new DeferredJavaObject(user_agent_windows), new DeferredJavaObject(platform) });
+      Assert.assertEquals(expected_windows_platform, result_windows_platform.toString());
+
+      String expected_ipad_platform   = new String("iPad");
+      Object result_ipad_platform = userAgentParser.evaluate(new DeferredObject[] { new DeferredJavaObject(user_agent_str), new DeferredJavaObject(platform) });
+      Assert.assertEquals(expected_ipad_platform, result_ipad_platform.toString());
 
    }
 

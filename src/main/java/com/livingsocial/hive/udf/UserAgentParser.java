@@ -55,7 +55,7 @@ public class UserAgentParser extends GenericUDF {
   
 
   private enum userOptions {
-	os, os_family, os_major, os_minor, os_patch, os_patch_minor, ua, ua_family, ua_major, ua_minor, ua_patch, device, rundsp_device_data
+	os, os_family, os_major, os_minor, os_patch, os_patch_minor, ua, ua_family, ua_major, ua_minor, ua_patch, device, platform, rundsp_device_data
   }
 
   public UserAgentParser() {
@@ -167,6 +167,14 @@ public class UserAgentParser extends GenericUDF {
 				case device:
 					result.set(c.device.family == null ? "null" : c.device.family );
 					break;
+        case platform:
+          if (mobilePattern.matcher( UserAgent.toString() ).matches()) {
+            result.set(c.device.family == null ? "Other" : c.device.family);
+          }
+          else {
+            result.set(c.os.family == null ? "Other" : c.os.family);
+          }
+          break;
 				case rundsp_device_data:
 					final String sep = "::::::";
 					final StringBuilder res = new StringBuilder(100)
