@@ -168,12 +168,7 @@ public class UserAgentParser extends GenericUDF {
 					result.set(c.device.family == null ? "null" : c.device.family );
 					break;
         case platform:
-          if (mobilePattern.matcher( UserAgent.toString() ).matches()) {
-            result.set(c.device.family == null ? "Other" : c.device.family);
-          }
-          else {
-            result.set(c.os.family == null ? "Other" : c.os.family);
-          }
+          result.set(( c.device.family == null ||  c.device.family == "Other" ) ? "Unclassified" : c.device.family );
           break;
 				case rundsp_device_data:
 					final String sep = "::::::";
@@ -204,19 +199,9 @@ public class UserAgentParser extends GenericUDF {
 						}
 					}
 					res.append(sep);
-          Boolean is_mobile = new Boolean(false);
-          is_mobile = mobilePattern.matcher( UserAgent.toString() ).matches();
-          if (is_mobile) {
-            res.append(c.device.family == null ? "Other" : c.device.family)
+          res.append( ( c.device.family == null ||  c.device.family == "Other" ) ? "Unclassified" : c.device.family)
             .append(sep)
-            .append("mobile");            
-          }
-          else {
-            // If desktop, then we want to have os family as the device.
-            res.append(c.os.family == null ? "Other" : c.os.family)
-            .append(sep)
-            .append("display");  
-          }
+            .append( mobilePattern.matcher(UserAgent.toString()).matches() ? "mobile" : "display" );            
 					result.set(res.toString());
 					break;
 				default:
