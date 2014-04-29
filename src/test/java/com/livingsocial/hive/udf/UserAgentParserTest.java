@@ -40,13 +40,13 @@ public class UserAgentParserTest {
 
 
       String user_agent_windows = new String("Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; MATBJS)");
-      String expected_windows   = new String("IE 10.0::::::Windows 8::::::Unclassified::::::display");
+      String expected_windows   = new String("IE 10.0::::::Windows 8::::::Windows 8::::::display");
       Object result_windows = userAgentParser.evaluate(new DeferredObject[] { new DeferredJavaObject(user_agent_windows), new DeferredJavaObject(device_data_str) });
       Assert.assertEquals(expected_windows, result_windows.toString());
 
 
       String user_agent_mac = new String("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.71 (KHTML, like Gecko) Version/6.1 Safari/537.71");
-      String expected_mac   = new String("Safari 6.1::::::Mac OS X 10.7.5::::::Unclassified::::::display");
+      String expected_mac   = new String("Safari 6.1::::::Mac OS X 10.7.5::::::Mac OS X::::::display");
       Object result_mac = userAgentParser.evaluate(new DeferredObject[] { new DeferredJavaObject(user_agent_mac), new DeferredJavaObject(device_data_str) });
       Assert.assertEquals(expected_mac, result_mac.toString());
 
@@ -56,7 +56,7 @@ public class UserAgentParserTest {
       Assert.assertEquals(expected_kindle, result_kindle.toString());
 
       String platform = new String("platform");
-      String expected_windows_platform = new String("Unclassified");
+      String expected_windows_platform = new String("Windows 8");
       Object result_windows_platform = userAgentParser.evaluate(new DeferredObject[] { new DeferredJavaObject(user_agent_windows), new DeferredJavaObject(platform) });
       Assert.assertEquals(expected_windows_platform, result_windows_platform.toString());
 
