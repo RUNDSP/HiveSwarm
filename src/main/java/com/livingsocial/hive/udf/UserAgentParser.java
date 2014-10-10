@@ -168,36 +168,10 @@ public class UserAgentParser extends GenericUDF {
 					result.set(c.device.family == null ? "null" : c.device.family );
 					break;
         case rundsp_browser:
-          final StringBuilder browser_res = new StringBuilder(100)
-            .append(c.userAgent.family == null ? "Other" : c.userAgent.family);
-          if (c.userAgent.major != null) {
-            browser_res.append(" ").append(c.userAgent.major);
-            if (c.userAgent.minor != null) {
-              browser_res.append(".").append(c.userAgent.minor);
-              if (c.userAgent.patch != null) {
-                browser_res.append(".").append(c.userAgent.patch);
-              }
-
-            }
-          }
-          result.set(browser_res.toString());
+          result.set( get_rundsp_browser(c) );
           break;
         case rundsp_os:
-          final StringBuilder os_res = new StringBuilder(100)
-            .append(c.os.family == null ? "Other" : c.os.family);
-          if (c.os.major != null) {
-            os_res.append(" ").append(c.os.major);
-            if (c.os.minor != null) {
-              os_res.append(".").append(c.os.minor);
-              if (c.os.patch != null) {
-                os_res.append(".").append(c.os.patch);
-                if (c.os.patchMinor != null) {
-                  os_res.append(".").append(c.os.patchMinor);
-                }
-              }
-            }
-          }
-          result.set(os_res.toString());
+          result.set( get_rundsp_os(c) );
           break;
         case platform:
         case rundsp_device: 
@@ -272,6 +246,43 @@ public class UserAgentParser extends GenericUDF {
 
 	return result;
   }
+
+
+public String get_rundsp_browser( Client c )
+{
+  final StringBuilder res = new StringBuilder(100)
+      .append(c.userAgent.family == null ? "Other" : c.userAgent.family);
+    if (c.userAgent.major != null) {
+      res.append(" ").append(c.userAgent.major);
+      if (c.userAgent.minor != null) {
+        res.append(".").append(c.userAgent.minor);
+        if (c.userAgent.patch != null) {
+          res.append(".").append(c.userAgent.patch);
+        }  
+
+      }
+    }
+  return res.toString();
+}
+
+public String get_rundsp_os( Client c )
+{
+  final StringBuilder os_res = new StringBuilder(100)
+    .append(c.os.family == null ? "Other" : c.os.family);
+  if (c.os.major != null) {
+    os_res.append(" ").append(c.os.major);
+    if (c.os.minor != null) {
+      os_res.append(".").append(c.os.minor);
+      if (c.os.patch != null) {
+        os_res.append(".").append(c.os.patch);
+        if (c.os.patchMinor != null) {
+          os_res.append(".").append(c.os.patchMinor);
+        }
+      }
+    }
+  }
+  return os_res.toString();
+}
 
 //  public Text evaluate(Text UserAgent) {
 //    return evaluate(UserAgent, null);
