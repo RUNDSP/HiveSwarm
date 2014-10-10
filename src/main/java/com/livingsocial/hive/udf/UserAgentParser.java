@@ -55,7 +55,7 @@ public class UserAgentParser extends GenericUDF {
   
 
   private enum userOptions {
-	os, os_family, os_major, os_minor, os_patch, os_patch_minor, ua, ua_family, ua_major, ua_minor, ua_patch, device, platform, rundsp_device_data
+	os, os_family, os_major, os_minor, os_patch, os_patch_minor, ua, ua_family, ua_major, ua_minor, ua_patch, device, platform, rundsp_device_data, rundsp_browser, rundsp_os, rundsp_device, rundsp_channel
   }
 
   public UserAgentParser() {
@@ -167,12 +167,53 @@ public class UserAgentParser extends GenericUDF {
 				case device:
 					result.set(c.device.family == null ? "null" : c.device.family );
 					break;
+        case rundsp_browser:
+          final StringBuilder browser_res = new StringBuilder(100)
+            .append(c.userAgent.family == null ? "Other" : c.userAgent.family);
+          if (c.userAgent.major != null) {
+            browser_res.append(" ").append(c.userAgent.major);
+            if (c.userAgent.minor != null) {
+              browser_res.append(".").append(c.userAgent.minor);
+              if (c.userAgent.patch != null) {
+                browser_res.append(".").append(c.userAgent.patch);
+              }
+
+            }
+          }
+          result.set(browser_res.toString());
+          break;
+        case rundsp_os:
+          final StringBuilder os_res = new StringBuilder(100)
+            .append(c.os.family == null ? "Other" : c.os.family);
+          if (c.os.major != null) {
+            os_res.append(" ").append(c.os.major);
+            if (c.os.minor != null) {
+              os_res.append(".").append(c.os.minor);
+              if (c.os.patch != null) {
+                os_res.append(".").append(c.os.patch);
+                if (c.os.patchMinor != null) {
+                  os_res.append(".").append(c.os.patchMinor);
+                }
+              }
+            }
+          }
+          result.set(os_res.toString());
+          break;
         case platform:
+        case rundsp_device: 
           if (mobilePattern.matcher( UserAgent.toString() ).matches()) {
             result.set(c.device.family == null ? "Other" : c.device.family);
           }
           else {
             result.set(c.os.family == null ? "Other" : c.os.family);
+          }
+          break;
+        case rundsp_channel:
+          if (mobilePattern.matcher( UserAgent.toString() ).matches()) {
+            result.set("mobile");
+          }
+          else {
+            result.set("display");
           }
           break;
 				case rundsp_device_data:
