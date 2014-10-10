@@ -192,32 +192,10 @@ public class UserAgentParser extends GenericUDF {
           break;
 				case rundsp_device_data:
 					final String sep = "::::::";
-					final StringBuilder res = new StringBuilder(100)
-						.append(c.userAgent.family == null ? "Other" : c.userAgent.family);
-					if (c.userAgent.major != null) {
-						res.append(" ").append(c.userAgent.major);
-						if (c.userAgent.minor != null) {
-							res.append(".").append(c.userAgent.minor);
-              if (c.userAgent.patch != null) {
-                res.append(".").append(c.userAgent.patch);
-              }
-
-						}
-					}
-					res.append(sep)
-						.append(c.os.family == null ? "Other" : c.os.family);
-					if (c.os.major != null) {
-						res.append(" ").append(c.os.major);
-						if (c.os.minor != null) {
-							res.append(".").append(c.os.minor);
-              if (c.os.patch != null) {
-                res.append(".").append(c.os.patch);
-                if (c.os.patchMinor != null) {
-                  res.append(".").append(c.os.patchMinor);
-                }
-              }
-						}
-					}
+					final StringBuilder res = new StringBuilder(100);
+          res.append( get_rundsp_browser(c) );
+					res.append(sep);
+          res.append( get_rundsp_os(c) );
 					res.append(sep);
           Boolean is_mobile = new Boolean(false);
           is_mobile = mobilePattern.matcher( UserAgent.toString() ).matches();
