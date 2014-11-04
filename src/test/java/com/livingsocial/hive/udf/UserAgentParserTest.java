@@ -52,9 +52,14 @@ public class UserAgentParserTest {
       Assert.assertEquals(expected_mac, result_mac.toString());
 
       String user_agent_kindle = new String("Mozilla/5.0 (Linux; U; en-us; KFSOWI Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Silk/3.8 Safari/535.19 Silk-Accelerated=true");
-      String expected_kindle   = new String("Amazon Silk 3.8::::::Android::::::Kindle Fire::::::mobile");
+      String expected_kindle   = new String("Amazon Silk 3.8::::::Android::::::Kindle Fire HD 7\" WiFi::::::mobile");
       Object result_kindle = userAgentParser.evaluate(new DeferredObject[] { new DeferredJavaObject(user_agent_kindle), new DeferredJavaObject(device_data_str) });
       Assert.assertEquals(expected_kindle, result_kindle.toString());
+
+      String user_agent_ie11 = new String("Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko");
+      String expected_ie11   = new String("IE 11.0::::::Windows 7::::::Windows 7::::::display");
+      Object result_ie11 = userAgentParser.evaluate(new DeferredObject[] { new DeferredJavaObject(user_agent_ie11), new DeferredJavaObject(device_data_str) });
+      Assert.assertEquals(expected_ie11, result_ie11.toString());
 
       
       /* individual field tests */
